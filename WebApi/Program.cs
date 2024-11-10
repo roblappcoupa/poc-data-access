@@ -1,6 +1,10 @@
-using WebApi;
+using WebApi.Configuration;
+using WebApi.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var configurationSection = builder.Configuration.GetSection("WebApi");
+builder.Services.Configure<ApplicationConfiguration>(configurationSection);
 
 builder.Services.AddControllers();
 builder.Services.AddPersonTypes();

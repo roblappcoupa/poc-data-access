@@ -16,4 +16,6 @@ public class CreatePerson : PersonBase
 public class Person : PersonBase
 {
     public Guid PersonId { get; init; }
+    
+    public DateTime CreatedOn { get; init; }
 }

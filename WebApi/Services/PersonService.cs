@@ -13,9 +13,41 @@ public interface IPersonService
 
 internal sealed class PersonService : IPersonService
 {
-    public Task<Person> Create(CreatePerson person) => throw new NotImplementedException();
+    private readonly IPersonRepositorySelector repositorySelector;
 
-    public Task<Person> Get(Guid personId) => throw new NotImplementedException();
+    public PersonService(IPersonRepositorySelector repositorySelector)
+    {
+        this.repositorySelector = repositorySelector;
+    }
 
-    public Task<IEnumerable<Person>> Get() => throw new NotImplementedException();
+    public Task<Person> Create(CreatePerson person)
+    {
+        var repository = this.repositorySelector.GetRepositoryOrThrow();
+
+        var result = repository.Create(
+            new Person
+            {
+                PersonId = Guid.NewGuid(),
+                Name = person.Name,
+                Birthday = person.Birthday,
+                Details = person.Details,
+                CreatedOn = DateTime.UtcNow
+            });
+
+        return result;
+    }
+
+    public Task<Person> Get(Guid personId)
+    {
+        var repository = this.repositorySelector.GetRepositoryOrThrow();
+
+        return repository.Get(personId);
+    }
+
+    public Task<IEnumerable<Person>> Get()
+    {
+        var repository = this.repositorySelector.GetRepositoryOrThrow();
+
+        return repository.Get();
+    }
 }

@@ -215,3 +215,9 @@ appsettings.local.json
 
 #coverlet
 TestResults/
+
+# Docker compose files
+webapi.env
+cassandra.env
+sqlserver.env
+mysql.env

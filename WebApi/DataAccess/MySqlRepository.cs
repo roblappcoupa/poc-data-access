@@ -4,15 +4,15 @@ using Microsoft.Extensions.Options;
 using WebApi.Configuration;
 using WebApi.Models;
 
-internal sealed class CassandraRepository : RepositoryBase, IPersonRepository
+internal sealed class MySqlRepository : RepositoryBase, IPersonRepository
 {
-    public CassandraRepository(
+    public MySqlRepository(
         IOptionsMonitor<ApplicationConfiguration> options)
         : base(options)
     {
     }
 
-    public DataAccessProvider Provider => DataAccessProvider.Cassandra;
+    public DataAccessProvider Provider => DataAccessProvider.MySql;
     
     public Task<Person> Create(Person person) => throw new NotImplementedException();
 
