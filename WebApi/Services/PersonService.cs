@@ -1,5 +1,6 @@
 namespace WebApi.Services;
 
+using WebApi.DataAccess;
 using WebApi.Models;
 
 public interface IPersonService
@@ -20,11 +21,10 @@ internal sealed class PersonService : IPersonService
         this.repositorySelector = repositorySelector;
     }
 
-    public Task<Person> Create(CreatePerson person)
-    {
-        var repository = this.repositorySelector.GetRepositoryOrThrow();
+    private IPersonRepository Repository => this.repositorySelector.GetRepositoryOrThrow();
 
-        var result = repository.Create(
+    public Task<Person> Create(CreatePerson person)
+        => this.Repository.Create(
             new Person
             {
                 PersonId = Guid.NewGuid(),
@@ -34,20 +34,7 @@ internal sealed class PersonService : IPersonService
                 CreatedOn = DateTime.UtcNow
             });
 
-        return result;
-    }
+    public Task<Person> Get(Guid personId) => this.Repository.Get(personId);
 
-    public Task<Person> Get(Guid personId)
-    {
-        var repository = this.repositorySelector.GetRepositoryOrThrow();
-
-        return repository.Get(personId);
-    }
-
-    public Task<IEnumerable<Person>> List(SearchParams searchParams)
-    {
-        var repository = this.repositorySelector.GetRepositoryOrThrow();
-
-        return repository.List(searchParams);
-    }
+    public Task<IEnumerable<Person>> List(SearchParams searchParams) => this.Repository.List(searchParams);
 }

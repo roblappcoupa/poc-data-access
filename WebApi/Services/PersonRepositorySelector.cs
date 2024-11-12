@@ -30,7 +30,7 @@ internal sealed class PersonRepositorySelector : IPersonRepositorySelector
     {
         var targetProvider = this.options.CurrentValue.Provider;
 
-        this.logger.LogInformation("Target provider: {Provider}", targetProvider);
+        this.logger.LogDebug("Target provider: {Provider}", targetProvider);
 
         var selectedRepository = this.personRepositories.FirstOrDefault(x => x.Provider == targetProvider);
 
@@ -39,7 +39,7 @@ internal sealed class PersonRepositorySelector : IPersonRepositorySelector
             throw new ConfigurationException("Could not find an enabled repository");
         }
 
-        this.logger.LogInformation("Selected provider: {Provider}", selectedRepository.Provider);
+        this.logger.LogDebug("Selected provider: {Provider}", selectedRepository.Provider);
 
         return selectedRepository;
     }

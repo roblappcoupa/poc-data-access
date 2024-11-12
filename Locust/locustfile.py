@@ -32,6 +32,8 @@ class UserBehavior(HttpUser):
     @task(2)
     def get_all_users(self):
         params = {
+            "page": 0,
+            "pageSize": 1000,
             "orderBy": "birthday"
         }
         with self.client.get("/api/v1/person", params=params, catch_response=True) as response:
