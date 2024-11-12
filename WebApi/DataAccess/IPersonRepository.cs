@@ -11,5 +11,5 @@ public interface IPersonRepository
     
     Task<Person> Get(Guid personId);
 
-    Task<IEnumerable<Person>> Get();
+    Task<IEnumerable<Person>> List(SearchParams searchParams);
 }

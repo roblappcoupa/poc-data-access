@@ -1,6 +1,7 @@
-namespace WebApi.DataAccess;
+namespace WebApi.DataAccess.InMemory;
 
 using System.Collections.Concurrent;
+using Gridify;
 using Microsoft.Extensions.Options;
 using WebApi.Configuration;
 using WebApi.Models;
@@ -27,5 +28,15 @@ internal sealed class InMemoryRepository : RepositoryBase, IPersonRepository
 
     public Task<Person> Get(Guid personId) => Store.GetValueOrDefault(personId).WrapInTask();
 
-    public Task<IEnumerable<Person>> Get() => Store.Values.AsEnumerable().WrapInTask();
+    public Task<IEnumerable<Person>> List(SearchParams searchParams)
+    {
+        var gridifyQuery = searchParams.ToGridifyQuery();
+        
+        var result = Store.Values
+            .AsQueryable()
+            .ApplyFilteringAndOrdering(gridifyQuery)
+            .AsEnumerable();
+
+        return result.WrapInTask();
+    }
 }

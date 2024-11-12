@@ -17,11 +17,11 @@ public class PersonController : ControllerBase
         this.personService = personService;
     }
 
-    [HttpGet("health")]
+    [HttpGet("~/health")]
     public IActionResult HealthCheck() => this.Ok(value: "Healthy");
 
     [HttpGet]
-    public Task<IEnumerable<Person>> GetAll() => this.personService.Get();
+    public Task<IEnumerable<Person>> List([FromQuery] SearchParams searchParams) => this.personService.List(searchParams);
 
     [HttpGet("{personId:guid}")]
     public Task<Person> Get([FromRoute] Guid personId) => this.personService.Get(personId);
@@ -31,6 +31,12 @@ public class PersonController : ControllerBase
     {
         var person = await this.personService.Create(createPerson);
 
-        return this.CreatedAtAction(nameof(this.Get), new { person = person.PersonId }, person);
+        return this.CreatedAtAction(
+            nameof(this.Get),
+            new
+            {
+                personId = person.PersonId
+            },
+            person);
     }
 }

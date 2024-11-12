@@ -8,7 +8,7 @@ public interface IPersonService
     
     Task<Person> Get(Guid personId);
 
-    Task<IEnumerable<Person>> Get();
+    Task<IEnumerable<Person>> List(SearchParams searchParams);
 }
 
 internal sealed class PersonService : IPersonService
@@ -44,10 +44,10 @@ internal sealed class PersonService : IPersonService
         return repository.Get(personId);
     }
 
-    public Task<IEnumerable<Person>> Get()
+    public Task<IEnumerable<Person>> List(SearchParams searchParams)
     {
         var repository = this.repositorySelector.GetRepositoryOrThrow();
 
-        return repository.Get();
+        return repository.List(searchParams);
     }
 }

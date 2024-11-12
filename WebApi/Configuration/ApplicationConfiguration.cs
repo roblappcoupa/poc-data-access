@@ -4,6 +4,8 @@ public class ApplicationConfiguration
 {
     public DataAccessProvider Provider { get; set; } = DataAccessProvider.InMemory;
 
+    public DebugConfiguration Debug { get; } = new();
+
     public InMemoryConfiguration InMemory { get; } = new();
     
     public CassandraConfiguration Cassandra { get; } = new();
@@ -13,6 +15,11 @@ public class ApplicationConfiguration
     public MongoDbConfiguration Mongo { get; } = new();
     
     public MySqlConfiguration MySql { get; } = new();
+}
+
+public class DebugConfiguration
+{
+    public bool DangerousLogConfiguration { get; init; }
 }
 
 public enum DataAccessProvider
@@ -38,6 +45,7 @@ public class CassandraConfiguration
 
 public class SqlServerConfiguration
 {
+    public string ConnectionString { get; init; }
 }
 
 public class MongoDbConfiguration

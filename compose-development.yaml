@@ -1,0 +1,35 @@
+services:
+  # SQL Server Service
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sqlserver
+    ports:
+      - "5050:1433"
+    env_file: "sqlserver.env"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+
+#  # Cassandra Service
+#  cassandra:
+#    image: cassandra:latest
+#    container_name: cassandra
+#    ports:
+#      - "9042:9042"
+#    volumes:
+#      - cassandra_data:/var/lib/cassandra
+#    env_file: "cassandra.env"
+#
+#  # MySQL Service
+#  mysql:
+#    image: mysql:latest
+#    container_name: mysql
+#    ports:
+#      - "3306:3306"
+#    env_file: "mysql.env"
+#    volumes:
+#      - mysql_data:/var/lib/mysql
+
+volumes:
+  cassandra_data:
+  sqlserver_data:
+  mysql_data:

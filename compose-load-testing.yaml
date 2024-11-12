@@ -1,0 +1,61 @@
+services:
+
+  # WebApi Service
+  webapi:
+    build:
+      context: ./WebApi
+      dockerfile: Dockerfile.WebApi
+    depends_on:
+      - sqlserver
+    container_name: webapi
+    ports:
+      - "5010:5010"
+    env_file: "WebApi/webapi.env"
+
+  # SQL Server Service
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sqlserver
+    ports:
+      - "5050:1433"
+    env_file: "sqlserver.env"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+
+  # Cassandra Service (commented out by default)
+  # cassandra:
+  #   image: cassandra:latest
+  #   container_name: cassandra
+  #   ports:
+  #     - "9042:9042"
+  #   volumes:
+  #     - cassandra_data:/var/lib/cassandra
+  #   env_file: "cassandra.env"
+
+  # MySQL Service (commented out by default)
+  # mysql:
+  #   image: mysql:latest
+  #   container_name: mysql
+  #   ports:
+  #     - "3306:3306"
+  #   env_file: "mysql.env"
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+
+  # Locust Service
+  locust:
+    build:
+      context: ./Locust
+      dockerfile: Dockerfile.Locust
+    depends_on:
+      - webapi
+    ports:
+      - "8089:8089" # Locust UI will be accessible on localhost:8089
+    environment:
+      TARGET_HOST: "http://webapi:5010"
+    command: [ "--host=http://webapi:5010" ]
+
+volumes:
+  cassandra_data:
+  sqlserver_data:
+  mysql_data:
