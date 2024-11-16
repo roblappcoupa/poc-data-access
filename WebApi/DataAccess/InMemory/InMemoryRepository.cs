@@ -19,16 +19,16 @@ internal sealed class InMemoryRepository : RepositoryBase, IPersonRepository
 
     public DataAccessProvider Provider => DataAccessProvider.InMemory;
 
-    public Task<Person> Create(Person person)
+    public Task<Person> Create(Person person, CancellationToken cancellationToken)
     {
         Store[person.PersonId] = person;
 
         return person.WrapInTask();
     }
 
-    public Task<Person> Get(Guid personId) => Store.GetValueOrDefault(personId).WrapInTask();
+    public Task<Person> Get(Guid personId, CancellationToken cancellationToken) => Store.GetValueOrDefault(personId).WrapInTask();
 
-    public Task<IEnumerable<Person>> List(SearchParams searchParams)
+    public Task<IEnumerable<Person>> List(SearchParams searchParams, CancellationToken cancellationToken)
     {
         var gridifyQuery = searchParams.ToGridifyQuery();
         

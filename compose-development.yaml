@@ -9,15 +9,15 @@ services:
     volumes:
       - sqlserver_data:/var/opt/mssql
 
-#  # Cassandra Service
-#  cassandra:
-#    image: cassandra:latest
-#    container_name: cassandra
-#    ports:
-#      - "9042:9042"
-#    volumes:
-#      - cassandra_data:/var/lib/cassandra
-#    env_file: "cassandra.env"
+  # Cassandra Service
+  cassandra:
+    image: cassandra:latest
+    container_name: cassandra
+    ports:
+      - "9042:9042"
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+    env_file: "cassandra.env"
 #
 #  # MySQL Service
 #  mysql:

@@ -7,9 +7,9 @@ public interface IPersonRepository
 {
     DataAccessProvider Provider { get; }
     
-    Task<Person> Create(Person person);
+    Task<Person> Create(Person person, CancellationToken cancellationToken);
     
-    Task<Person> Get(Guid personId);
+    Task<Person> Get(Guid personId, CancellationToken cancellationToken);
 
-    Task<IEnumerable<Person>> List(SearchParams searchParams);
+    Task<IEnumerable<Person>> List(SearchParams searchParams, CancellationToken cancellationToken);
 }

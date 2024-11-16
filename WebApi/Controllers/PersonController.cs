@@ -1,5 +1,6 @@
 namespace WebApi.Controllers;
 
+using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
@@ -18,18 +19,33 @@ public class PersonController : ControllerBase
     }
 
     [HttpGet("~/health")]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
     public IActionResult HealthCheck() => this.Ok(value: "Healthy");
 
     [HttpGet]
-    public Task<IEnumerable<Person>> List([FromQuery] SearchParams searchParams) => this.personService.List(searchParams);
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    public Task<IEnumerable<Person>> List(
+        [FromQuery] SearchParams searchParams,
+        CancellationToken cancellationToken)
+        => this.personService.List(searchParams, cancellationToken);
 
     [HttpGet("{personId:guid}")]
-    public Task<Person> Get([FromRoute] Guid personId) => this.personService.Get(personId);
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    public Task<Person> Get(
+        [FromRoute] Guid personId,
+        CancellationToken cancellationToken)
+        => this.personService.Get(personId, cancellationToken);
 
     [HttpPost]
-    public async Task<IActionResult> CreatePerson([FromBody] CreatePerson createPerson)
+    [ProducesResponseType((int)HttpStatusCode.Created)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    public async Task<IActionResult> CreatePerson(
+        [FromBody] CreatePerson createPerson,
+        CancellationToken cancellationToken)
     {
-        var person = await this.personService.Create(createPerson);
+        var person = await this.personService.Create(createPerson, cancellationToken);
 
         return this.CreatedAtAction(
             nameof(this.Get),

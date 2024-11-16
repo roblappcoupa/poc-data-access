@@ -368,3 +368,6 @@ ehthumbs.db
 # Other
 *.swp
 *.swo
+
+_tmp.txt
+

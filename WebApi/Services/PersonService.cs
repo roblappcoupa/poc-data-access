@@ -5,11 +5,11 @@ using WebApi.Models;
 
 public interface IPersonService
 {
-    Task<Person> Create(CreatePerson person);
+    Task<Person> Create(CreatePerson person, CancellationToken cancellationToken);
     
-    Task<Person> Get(Guid personId);
+    Task<Person> Get(Guid personId, CancellationToken cancellationToken);
 
-    Task<IEnumerable<Person>> List(SearchParams searchParams);
+    Task<IEnumerable<Person>> List(SearchParams searchParams, CancellationToken cancellationToken);
 }
 
 internal sealed class PersonService : IPersonService
@@ -23,7 +23,7 @@ internal sealed class PersonService : IPersonService
 
     private IPersonRepository Repository => this.repositorySelector.GetRepositoryOrThrow();
 
-    public Task<Person> Create(CreatePerson person)
+    public Task<Person> Create(CreatePerson person, CancellationToken cancellationToken)
         => this.Repository.Create(
             new Person
             {
@@ -32,9 +32,12 @@ internal sealed class PersonService : IPersonService
                 Birthday = person.Birthday,
                 Details = person.Details,
                 CreatedOn = DateTime.UtcNow
-            });
+            },
+            cancellationToken);
 
-    public Task<Person> Get(Guid personId) => this.Repository.Get(personId);
+    public Task<Person> Get(Guid personId, CancellationToken cancellationToken)
+        => this.Repository.Get(personId, cancellationToken);
 
-    public Task<IEnumerable<Person>> List(SearchParams searchParams) => this.Repository.List(searchParams);
+    public Task<IEnumerable<Person>> List(SearchParams searchParams, CancellationToken cancellationToken)
+        => this.Repository.List(searchParams, cancellationToken);
 }

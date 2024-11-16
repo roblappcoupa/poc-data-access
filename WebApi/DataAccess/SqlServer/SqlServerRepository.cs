@@ -21,23 +21,23 @@ internal sealed class SqlServerRepository : RepositoryBase, IPersonRepository
 
     public DataAccessProvider Provider => DataAccessProvider.SqlServer;
 
-    public async Task<Person> Create(Person person)
+    public async Task<Person> Create(Person person, CancellationToken cancellationToken)
     {
-        await this.context.Persons.AddAsync(person);
+        await this.context.Persons.AddAsync(person, cancellationToken);
 
-        await this.context.SaveChangesAsync();
+        await this.context.SaveChangesAsync(cancellationToken);
 
         return person;
     }
 
-    public async Task<Person> Get(Guid personId)
+    public async Task<Person> Get(Guid personId, CancellationToken cancellationToken)
     {
-        var person = await this.context.Persons.FirstOrDefaultAsync(x => x.PersonId == personId);
+        var person = await this.context.Persons.FirstOrDefaultAsync(x => x.PersonId == personId, cancellationToken: cancellationToken);
 
         return person;
     }
 
-    public async Task<IEnumerable<Person>> List(SearchParams searchParams)
+    public async Task<IEnumerable<Person>> List(SearchParams searchParams, CancellationToken cancellationToken)
     {
         var gridifyQuery = searchParams.ToGridifyQuery();
         
@@ -45,7 +45,7 @@ internal sealed class SqlServerRepository : RepositoryBase, IPersonRepository
             .AsQueryable()
             .ApplyFilteringAndOrdering(gridifyQuery);
         
-        var persons = await query.ToListAsync();
+        var persons = await query.ToListAsync(cancellationToken: cancellationToken);
 
         return persons;
     }

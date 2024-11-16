@@ -40,20 +40,30 @@ To stop everything, run:
 docker compose -f compose-load-testing.yaml down
 ```
 
-
-
 ## Preparing target providers
 ### SQL Server
 1. Install local tools from tool manifest file:
-    ```shell
-    dotnet tool restore
-    ```
+```shell
+dotnet tool restore
+```
 2. Create SQL Server database
-    ```shell
-    dotnet ef migrations add InitialCreate --project .\WebApi\WebApi.csproj
-    dotnet ef database update --connection "Server=YOUR_SQL_SERVER;Database=YOUR_DB_NAME;User Id=YOUR_USER;Password=YOUR_PASSWORD;"
-    ```
+```shell
+dotnet ef migrations add InitialCreate --project .\WebApi\WebApi.csproj
+dotnet ef database update --connection "Server=YOUR_SQL_SERVER;Database=YOUR_DB_NAME;User Id=YOUR_USER;Password=YOUR_PASSWORD;"
+```
 ### Cassandra
+1. Create keyspace and table
+```shell
+CREATE KEYSPACE IF NOT EXISTS application_keyspace WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
 
+USE application_keyspace;
 
+CREATE TABLE IF NOT EXISTS Person (
+    PersonId UUID PRIMARY KEY,
+    CreatedOn timestamp,
+    Name text,
+    Birthday timestamp,
+    Details text
+);
+```
 

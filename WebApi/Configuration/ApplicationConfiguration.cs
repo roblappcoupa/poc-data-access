@@ -41,6 +41,7 @@ public class InMemoryConfiguration
 
 public class CassandraConfiguration
 {
+    public string ContactPoint { get; init; }
 }
 
 public class SqlServerConfiguration
