@@ -45,7 +45,7 @@ internal static class ServiceCollectionExtensions
         // We have to build a temporary service provider to get the ILoggerProvider
         using var serviceProvider = serviceCollection.BuildServiceProvider();
         var loggingProvider = serviceProvider.GetRequiredService<ILoggerProvider>();
-        Diagnostics.AddLoggerProvider(new MyLoggerProvider(loggingProvider));
+        Diagnostics.AddLoggerProvider(loggingProvider);
 
         var session = cluster.Connect();
 
@@ -62,22 +62,5 @@ internal static class ServiceCollectionExtensions
         serviceCollection.AddScoped<IPersonRepository, CassandraRepository>();
         
         return serviceCollection;
-    }
-
-    private sealed class MyLoggerProvider : ILoggerProvider
-    {
-        private readonly ILoggerProvider innerProvider;
-
-        public MyLoggerProvider(ILoggerProvider innerProvider)
-        {
-            this.innerProvider = innerProvider;
-        }
-
-        public ILogger CreateLogger(string categoryName) => this.innerProvider.CreateLogger(categoryName);
-        
-        public void Dispose()
-        {
-            Console.WriteLine("\n\nDISPOSE WAS CALLED\n\n");
-        }
     }
 }
